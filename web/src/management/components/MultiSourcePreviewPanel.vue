@@ -1,9 +1,9 @@
 <template>
   <div class="multi-source-list">
-    <div class="left-panel">
+    <div class="left-panel" v-if="!hideLeftPanel">
       <slot></slot>
     </div>
-    <div class="right-panel">
+    <div class="right-panel" :class="{ 'full-width': hideLeftPanel }">
       <div class="questions-preview-wrapper">
         <div class="questions-preview-box">
           <div class="diabled-edit-mask"></div>
@@ -27,11 +27,12 @@ const props = defineProps({
   questionDataList: {
     type: Array,
     default: () => []
+  },
+  hideLeftPanel: {
+    type: Boolean,
+    default: false
   }
 })
-
-
-
 </script>
 
 <style lang="scss" scoped>
@@ -57,6 +58,12 @@ const props = defineProps({
     display: flex;
     align-items: center;
     justify-content: center;
+    
+    &.full-width {
+      width: 100% !important;
+      flex: 1 !important;
+    }
+    
     .questions-preview-wrapper {
       position: relative;
       width: 375px;
@@ -77,6 +84,30 @@ const props = defineProps({
       top: 0;
       bottom: 0;
       background-color: rgba(0, 0, 0, 0);
+    }
+  }
+}
+
+// Responsive design untuk mobile
+@media (max-width: 768px) {
+  .multi-source-list {
+    flex-direction: column;
+    
+    .left-panel {
+      width: 100%;
+      flex: none;
+    }
+    
+    .right-panel {
+      width: 100% !important;
+      flex: 1;
+      
+      .questions-preview-wrapper {
+        width: 100%;
+        max-width: 375px;
+        height: 100%;
+        max-height: 100%;
+      }
     }
   }
 }
