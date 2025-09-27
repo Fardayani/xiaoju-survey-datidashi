@@ -45,10 +45,6 @@
                   <p class="placeholder-subtext">Ketik atau tempel teks pertanyaan Anda di sini</p>
                 </div>
               </div>
-              <div v-if="text" class="input-stats">
-                <span class="char-count">{{ text.length }} karakter</span>
-                <span class="question-count">{{ previewQuestionList.length }} pertanyaan terdeteksi</span>
-              </div>
             </div>
           </div>
         </MultiSourcePreviewPanel>
@@ -77,10 +73,6 @@
                 <p class="placeholder-text">输入区</p>
                 <p class="placeholder-subtext">Ketik atau tempel teks pertanyaan Anda di sini</p>
               </div>
-            </div>
-            <div v-if="text" class="input-stats">
-              <span class="char-count">{{ text.length }} karakter</span>
-              <span class="question-count">{{ previewQuestionList.length }} pertanyaan terdeteksi</span>
             </div>
           </div>
         </div>
@@ -351,7 +343,7 @@ onUnmounted(() => {
       height: 100%;
       padding: 16px;
       border: none;
-      background: transparent;
+      background: #fff;
       resize: none;
       font-size: 14px;
       line-height: 1.5;
@@ -403,29 +395,6 @@ onUnmounted(() => {
           margin: 0;
           opacity: 0.7;
         }
-      }
-    }
-    
-    .input-stats {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 8px 16px;
-      display: flex;
-      justify-content: space-between;
-      font-size: 14px;
-      color: #7f8c8d;
-      border-top: 1px solid #ecf0f1;
-      
-      .char-count {
-        font-weight: 500;
-      }
-      
-      .question-count {
-        color: #27ae60;
-        font-weight: 600;
       }
     }
   }
@@ -649,14 +618,6 @@ onUnmounted(() => {
         padding: 12px;
         font-size: 12px;
         min-height: 150px;
-      }
-      
-      .input-stats {
-        padding: 6px 12px;
-        flex-direction: column;
-        gap: 2px;
-        align-items: flex-start;
-        font-size: 14px;
       }
     }
   }
