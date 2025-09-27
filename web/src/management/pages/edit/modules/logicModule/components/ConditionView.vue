@@ -13,6 +13,7 @@
         class="select field-select"
         v-model="conditionField"
         placeholder="请选择题目"
+        aria-label="Pilih pertanyaan"
         @change="(val: any) => handleChange(conditionNode, 'field', val)"
       >
         <el-option v-for="{ label, value } in fieldList" :key="value" :label="label" :value="value">
@@ -30,6 +31,7 @@
         v-model="conditionValue"
         placeholder="请选择选项"
         multiple
+        aria-label="Pilih opsi jawaban"
         @change="(val: any) => handleChange(conditionNode, 'value', val)"
       >
         <el-option

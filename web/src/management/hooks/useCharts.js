@@ -1,4 +1,4 @@
-import * as echarts from 'echarts/core'
+import { init, use } from 'echarts/core'
 import { BarChart, PieChart, GaugeChart } from 'echarts/charts'
 import {
   TooltipComponent,
@@ -9,7 +9,8 @@ import {
 import { CanvasRenderer } from 'echarts/renderers'
 import { getOption } from '@/management/config/chartConfig'
 
-echarts.use([
+// Daftarkan hanya modul yang diperlukan
+use([
   TitleComponent,
   TooltipComponent,
   GridComponent,
@@ -21,13 +22,13 @@ echarts.use([
 ])
 
 /**
- * 绘制图表
- * @param {Object} el
- * @param {String} type
- * @param {Array} data
+ * Menggambar grafik
+ * @param {Object} el - elemen DOM
+ * @param {String} type - tipe grafik
+ * @param {Array} data - data untuk grafik
  */
 export default (el, type, data) => {
-  const chart = echarts.init(el)
+  const chart = init(el)
   const option = getOption[type](data)
 
   chart.setOption(option, true)
@@ -36,8 +37,8 @@ export default (el, type, data) => {
     chart.resize()
   }
 
-  const changeType = (type, data) => {
-    chart.setOption(getOption[type](data), true)
+  const changeType = (newType, newData) => {
+    chart.setOption(getOption[newType](newData), true)
   }
 
   return { chart, resize, changeType }

@@ -143,7 +143,7 @@
       <div class="ai-generate-header">
         
         <div class="nav-left">
-         <img src="/imgs/s-logo.webp" class="logo" loading="lazy"/>
+         <img src="/imgs/s-logo.webp" class="logo" alt="logo" />
           <el-button link  @click="showAIGenerate = false">
             <i class="iconfont icon-fanhui"></i>
             返回

@@ -31,7 +31,7 @@
         <template v-if="i == 0">
           <div v-if="props.readonly" class="cascader-mask"></div>
           <el-select v-model="valList[i]"  @change="(data)=>handleChange(data,i)" :placeholder="placeholderList[i].text" size="large" value-key="hash"
-            style="width: 194px">
+            style="width: 194px" :aria-label="`Pilih ${placeholderList[i].text}`">
             <el-option  v-for="item in props.cascaderData.children" :key="item.hash" :label="item.text"
               :value="item" />
           </el-select>
@@ -39,7 +39,7 @@
         <template v-else>
           <div v-if="valList[i - 1] && valList[i - 1]?.children?.length > 0">
             <el-select v-model="valList[i]" @change="(data)=>handleChange(data,i)" :placeholder="placeholderList[i].text" size="large" value-key="hash"
-              style="width: 194px">
+              style="width: 194px" :aria-label="`Pilih ${placeholderList[i].text}`">
               <el-option v-for="item in valList[i - 1].children" :key="item.hash" :label="item.text" :value="item" />
             </el-select>
           </div>

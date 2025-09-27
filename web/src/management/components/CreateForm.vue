@@ -29,7 +29,7 @@
       </el-radio-group>
     </el-form-item>
     <el-form-item prop="groupId" label="分组" v-if="menuType === MenuType.PersonalGroup">
-      <el-select v-model="form.groupId" placeholder="未分组" clearable>
+      <el-select v-model="form.groupId" placeholder="未分组" aria-label="Pilih grup survei" clearable>
         <el-option
           v-for="item in groupAllList"
           :key="item?._id"

@@ -26,7 +26,7 @@
         label="分组"
         v-if="menuType === MenuType.PersonalGroup && !current.isCollaborated"
       >
-        <el-select v-model="current.groupId" placeholder="未分组" clearable>
+        <el-select v-model="current.groupId" placeholder="未分组" clearable aria-label="Pilih grup"> 
           <el-option
             v-for="item in groupAllList"
             :key="item._id"

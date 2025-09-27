@@ -7,7 +7,7 @@
         placement="top"
         trigger="hover"
       >
-        <img :src="qRCodeImg" width="120" height="120" />
+        <img :src="qRCodeImg" width="120" height="120" alt="qrcodeimage"/>
         <template #reference>
           <el-button>
             <i style="font-size: 24px" class="iconfont icon-erweima"></i>

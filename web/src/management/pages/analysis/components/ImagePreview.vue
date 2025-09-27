@@ -4,7 +4,7 @@
       <div class="image-preview" v-show="visible">
         <div class="close-btn" @click="visible = false"><i-ep-close /></div>
         <div class="image-con">
-          <img :src="props.url" class="image-item" />
+          <img :src="props.url" class="image-item" alt="imagepreview"/>
         </div>
       </div>
     </Transition>

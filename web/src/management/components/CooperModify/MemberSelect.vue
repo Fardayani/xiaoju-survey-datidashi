@@ -10,6 +10,7 @@
       :options="selectOptions"
       :loading="loading"
       placeholder="请输入账号名搜索"
+      aria-label="Cari nama akun"
       @change="handleSelect"
     />
     <MemberList

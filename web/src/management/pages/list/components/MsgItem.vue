@@ -2,7 +2,7 @@
   <div :class="['message', message.sender]">
     <img 
       :src="message.sender === 'user' ? '/imgs/AI/User_Headshot_Round.webp' : '/imgs/AI/XIAOJU_Headshot_Round.webp'" 
-      class="avatar"
+      class="avatar" alt="User_Headshot_Round"
     />
     <div class="bubble">
       <div 

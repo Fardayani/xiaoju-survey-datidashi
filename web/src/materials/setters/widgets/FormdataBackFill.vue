@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row class="row">
-      <el-select :modelValue="selectModelValue" @change="handleSelectChange">
+      <el-select :modelValue="selectModelValue" @change="handleSelectChange" aria-label="Pilih opsi">
         <el-option
           v-for="item in options"
           :label="`${item.label}`"

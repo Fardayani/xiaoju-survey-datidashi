@@ -1,6 +1,6 @@
 <template>
   <div class="text-select-root">
-    <el-select v-model="selectValue" :empty-values="[null, undefined]" :placeholder="options.label">
+    <el-select v-model="selectValue" :empty-values="[null, undefined]" :placeholder="options.label" aria-label="Pilih {{ options.label }}">
       <el-option
         v-for="item in options.value"
         :key="item.value"

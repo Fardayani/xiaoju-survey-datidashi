@@ -138,29 +138,18 @@ export default defineConfig({
     }
   },
   build: {
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    },
     rollupOptions: {
       output: {
-        assetFileNames: '[ext]/[name]-[hash].[ext]',
-        chunkFileNames: 'js/[name]-[hash].js',
-        entryFileNames: 'js/[name]-[hash].js',
-        manualChunks(id) {
-          // 建议根据项目生产实际情况进行优化，部分可走cdn或进行小资源包合并
-          if (id.includes('element-plus')) {
-            return 'element-plus'
-          }
-          if (id.includes('wangeditor')) {
-            return 'wangeditor'
-          }
-          if (id.includes('node-forg')) {
-            return 'node-forg'
-          }
-          if (id.includes('echarts')) {
-            return 'echarts'
-          }
-
-          if (id.includes('node_modules')) {
-            return 'packages'
-          }
+        manualChunks: {
+          vendor: ['vue', 'vue-router', 'pinia'],
+          echarts: ['echarts']
         }
       }
     }

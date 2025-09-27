@@ -27,7 +27,7 @@
         <p class="form-item-tip">备注仅自己可见</p>
       </el-form-item>
       <el-form-item prop="groupId" label="分组" v-if="menuType === MenuType.PersonalGroup">
-        <el-select v-model="form.groupId" placeholder="未分组" clearable>
+        <el-select v-model="form.groupId" placeholder="未分组" clearable aria-label="Pilih grup survei" >
           <el-option
             v-for="item in groupAllList"
             :key="item?._id"

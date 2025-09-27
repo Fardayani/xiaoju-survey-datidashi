@@ -1,6 +1,6 @@
 <template>
   <div class="default-empty-root">
-    <img class="img" :src="data.img" />
+    <img class="img" :src="data.img" alt="data"  />
     <div class="title">{{ data.title }}</div>
     <div class="desc" v-html="data.desc"></div>
   </div>

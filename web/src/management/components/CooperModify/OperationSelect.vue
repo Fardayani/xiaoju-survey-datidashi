@@ -5,6 +5,7 @@
       :multiple="multiple"
       v-model="value"
       placeholder="请选择"
+      aria-label="Pilih hak akses"
       :style="{ width: `${multiple ? 226 : 100}px` }"
       popper-class="custom-popper"
       @change="handleChange"

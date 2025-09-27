@@ -6,6 +6,7 @@
     multiple
     popper-class="option-list-width"
     :disabled="formConfig.disabled"
+    aria-label="Pilih beberapa opsi"
   >
     <el-option
       v-for="item in options"

@@ -7,6 +7,7 @@
     popper-class="option-list-width"
     :disabled="formConfig.disabled"
     :class="formConfig.contentClass"
+    aria-label="Pilih opsi"
   >
     <el-option
       v-for="item in options"

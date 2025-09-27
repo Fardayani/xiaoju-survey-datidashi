@@ -35,7 +35,7 @@
     </el-collapse-item>
     <Teleport to="body">
       <div class="preview-popover" v-show="isShowPreviewImage" :style="{ top: previewTop + 'px' }">
-        <img :src="previewImg" class="preview-image" />
+        <img :src="previewImg" class="preview-image" alt="previewImage" />
         <span class="preview-arrow"></span>
       </div>
     </Teleport>

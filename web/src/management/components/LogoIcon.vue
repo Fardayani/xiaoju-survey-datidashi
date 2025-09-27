@@ -1,6 +1,6 @@
 <template>
   <div class="navbar-main-logo" @click="handleNavigate">
-    <img src="/imgs/s-logo.webp" />
+    <img src="/imgs/s-logo.webp" alt="slogo" />
   </div>
 </template>
 <script setup lang="ts">

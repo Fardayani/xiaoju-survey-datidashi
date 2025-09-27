@@ -2,7 +2,7 @@
   <div :class="['nav-header', `${boxShadow ? 'box-shadow' : null}`]">
     <div class="left">
       <div class="logo">
-        <img class="logoImg" :src="img" @click="toHomePage" />
+        <img class="logoImg" :src="img" @click="toHomePage" alt="toHomePage"/>
       </div>
       <div class="return no-logo-return icon-fanhui" @click="onBack">返回</div>
     </div>

@@ -98,6 +98,7 @@
             src="/imgs/AI/icon_Sent.svg" 
             class="send-icon"
             @click="() => handleGenerate()"
+            alt="icon_Sent"
           />
         </div>
       </div>

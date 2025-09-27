@@ -5,6 +5,7 @@
       placeholder="请选择"
       :value="formConfig.value[formConfig.selectKey]"
       @change="handleInputChange($event, formConfig.selectKey)"
+      aria-label="Pilih opsi"
     >
       <el-option
         v-for="item in formConfig.options"

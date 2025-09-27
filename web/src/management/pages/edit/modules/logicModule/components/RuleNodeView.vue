@@ -26,6 +26,7 @@
               class="select field-select"
               v-model="ruleTarget"
               placeholder="请选择"
+              aria-label="Pilih pertanyaan target"
               @change="(val: any) => handleChange(ruleNode, 'target', val)"
             >
               <el-option
