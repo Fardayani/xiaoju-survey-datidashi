@@ -9,7 +9,7 @@
         @click="showMobilePreview = !showMobilePreview"
       >
         <i class="icon-preview"></i>
-        {{ showMobilePreview ? 'Sembunyikan Preview' : 'Tampilkan Preview' }}
+        {{ showMobilePreview ? '隐藏预览' : '显示预览' }}
         ({{ previewQuestionList.length }})
       </el-button>
     </div>
@@ -28,24 +28,24 @@
                 <h2 class="nav-title">输入区</h2>
                 <el-button type="primary" class="example-btn" @click="showExample = true">
                   <i class="icon-example"></i>
-                  Input Contoh
+                  示例输入
                 </el-button>
               </div>
             </div>
             <div class="text-input-container">
-              <label for="question-text-input" class="visually-hidden">Masukkan teks pertanyaan</label>
+              <label for="question-text-input" class="visually-hidden">输入问题文本</label>
               <textarea 
                 id="question-text-input"
                 class="text-input" 
                 v-model="text" 
                 @input="onInput"
-                placeholder="Masukkan teks pertanyaan di sini..."
+                placeholder="在此输入问题文本..."
               ></textarea>
               <div v-if="!text" class="placeholder-container">
                 <div class="placeholder-content">
                   <i class="icon-upload"></i>
                   <p class="placeholder-text">输入区</p>
-                  <p class="placeholder-subtext">Ketik atau tempel teks pertanyaan Anda di sini</p>
+                  <p class="placeholder-subtext">在此键入或粘贴您的问题文本</p>
                 </div>
               </div>
             </div>
@@ -59,12 +59,12 @@
               <h2 class="nav-title">输入区</h2>
               <el-button type="primary" class="example-btn" @click="showExample = true">
                 <i class="icon-example"></i>
-                Input Contoh
+                示例输入
               </el-button>
             </div>
           </div>
           <div class="text-input-container">
-            <label for="question-text-input-mobile" class="visually-hidden">Masukkan teks pertanyaan</label>
+            <label for="question-text-input-mobile" class="visually-hidden">输入问题文本</label>
             <textarea 
               id="question-text-input-mobile"
               class="text-input" 
@@ -86,7 +86,7 @@
         <!-- Mobile Preview Panel (separate when toggled) -->
         <div v-if="isMobile && showMobilePreview" class="mobile-preview-section">
           <div class="preview-header">
-            <h3>Question Preview</h3>
+            <h3>问题预览</h3>
             <el-button 
               type="primary" 
               link 
@@ -94,7 +94,7 @@
               @click="showMobilePreview = false"
             >
               <i class="icon-close"></i>
-              Tutup
+              关闭
             </el-button>
           </div>
           <div class="preview-content">
@@ -114,8 +114,8 @@
       >
         <template #header>
           <div class="dialog-header">
-            <h3>Contoh Format Input</h3>
-            <p>Pilih contoh format yang sesuai dengan kebutuhan Anda</p>
+            <h3>输入格式示例</h3>
+            <p>选择适合您需求的示例格式</p>
           </div>
         </template>
         
@@ -232,50 +232,6 @@
     width: 100%;
     height: 100%;
     min-height: 100vh;
-  }
-  .el-menu {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    background: transparent;
-  }
-
-  .el-menu-item, .el-sub-menu {
-    padding: 8px 16px;
-    cursor: pointer;
-    font-size: 14px;
-    color: white;
-  }
-
-  .el-sub-menu {
-    position: relative;
-  }
-
-  .el-menu--popup {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: white;
-    color: #2c3e50;
-    border: 1px solid #e1e5e9;
-    border-radius: 4px;
-    list-style: none;
-    padding: 8px 0;
-    min-width: 150px;
-  }
-
-  .el-menu--popup .el-menu-item {
-    color: #2c3e50;
-    padding: 8px 16px;
-  }
-
-  .el-menu-item:hover, .el-sub-menu:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-
-  .el-menu--popup .el-menu-item:hover {
-    background: #f8f9fa;
   }
 
   /* Visually hidden class for accessible labels */
