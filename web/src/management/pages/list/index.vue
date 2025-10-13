@@ -172,29 +172,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, defineAsyncComponent } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-
-// Komponen statis (selalu ada)
-import TopNav from '@/management/components/TopNav.vue'
+import BaseList from './components/BaseList.vue'
+import RecycleBinList from './components/RecycleBinList.vue'
+import SpaceList from './components/SpaceList.vue'
+import GroupList from './components/GroupList.vue'
 import SliderBar from './components/SliderBar.vue'
+import SpaceModify from './components/SpaceModify.vue'
+import GroupModify from './components/GroupModify.vue'
+import TextImport from './components/TextImport.vue'
+import ExcelImport from './components/ExcelImport.vue'
+import AIGenerate from './components/AIGenerate.vue'
 
-// SOLUSI BAGIAN 1: Lazy load semua komponen lain untuk mengatasi Render Delay
-const BaseList = defineAsyncComponent(() => import('./components/BaseList.vue'))
-const RecycleBinList = defineAsyncComponent(() => import('./components/RecycleBinList.vue'))
-const SpaceList = defineAsyncComponent(() => import('./components/SpaceList.vue'))
-const GroupList = defineAsyncComponent(() => import('./components/GroupList.vue'))
-const SpaceModify = defineAsyncComponent(() => import('./components/SpaceModify.vue'))
-const GroupModify = defineAsyncComponent(() => import('./components/GroupModify.vue'))
-const TextImport = defineAsyncComponent(() => import('./components/TextImport.vue'))
-const ExcelImport = defineAsyncComponent(() => import('./components/ExcelImport.vue'))
-const AIGenerate = defineAsyncComponent(() => import('./components/AIGenerate.vue'))
-const CreateForm = defineAsyncComponent(() => import('@/management/components/CreateForm.vue'));
-
-// Impor lainnya
+import TopNav from '@/management/components/TopNav.vue'
+import CreateForm from '@/management/components/CreateForm.vue';
 import { MenuType } from '@/management/utils/workSpace'
+
 import { useWorkSpaceStore } from '@/management/stores/workSpace'
 import { useSurveyListStore } from '@/management/stores/surveyList'
 import { type IWorkspace } from '@/management/utils/workSpace'
@@ -234,17 +230,22 @@ interface BaseListInstance {
 
 const activeValue = ref('')
 const listRef = ref<BaseListInstance | null>(null)
-const loading = ref(true) // Set loading to true by default
+
+const loading = ref(false)
+
 const spaceListRef = ref<any>(null)
 const spaceLoading = ref(false)
 const groupLoading = ref(false)
+
 const showCreateMethod = ref(false)
 const showTextImport = ref(false)
 const showExcelImport = ref(false)
 const showCreateForm = ref(false)
 const questionList = ref<Array<any>>([])
 const createMethod = ref('')
+const createFormData = ref<{ title: string; remark?: string; surveyType: string; groupId?: string } | null>(null)
 const isRecycleBin = computed(() => menuType.value === MenuType.RecycleBin);
+
 const showAIGenerate = ref(false)
 
 const fetchSpaceList = async (params?: any) => {
@@ -267,7 +268,7 @@ const getRecycleBinCount = async (params?: any) => {
 
 const handleSpaceSelect = async (id: string) => {
   if (activeValue.value === id) {
-    return
+    return void 0
   }
   activeValue.value = id
   switch (id) {
@@ -275,22 +276,26 @@ const handleSpaceSelect = async (id: string) => {
       workSpaceStore.changeMenuType(MenuType.PersonalGroup)
       workSpaceStore.changeWorkSpace('')
       await fetchGroupList()
+      // isRecycleBin.value = false
       break
     case MenuType.SpaceGroup:
       workSpaceStore.changeMenuType(MenuType.SpaceGroup)
       workSpaceStore.changeWorkSpace('')
       await fetchSpaceList()
+      // isRecycleBin.value = false
       break
     case MenuType.RecycleBin:
       workSpaceStore.changeMenuType(MenuType.RecycleBin)
       workSpaceStore.changeWorkSpace('')
+      // isRecycleBin.value = true
       await fetchSurveyList()
       break
     default: {
+      // isRecycleBin.value = false
       const parentMenu = spaceMenus.value.find((parent: any) =>
         parent.children.find((children: any) => children.id.toString() === id)
       )
-      if (parentMenu) {
+      if (parentMenu != undefined) {
         workSpaceStore.changeMenuType(parentMenu.id)
         if (parentMenu.id === MenuType.PersonalGroup) {
           workSpaceStore.changeGroup(id)
@@ -306,36 +311,34 @@ const handleSpaceSelect = async (id: string) => {
 }
 
 const fetchSurveyList = async (params?: any) => {
-  loading.value = true
-  const queryParams = params || { pageSize: 10, curPage: 1 }
-  if (workSpaceId.value) {
-    queryParams.workspaceId = workSpaceId.value
+  if (!params) {
+    params = {
+      pageSize: 10,
+      curPage: 1
+    }
   }
-  queryParams.isRecycleBin = isRecycleBin.value
-  await surveyListStore.getSurveyList(queryParams)
+  if (workSpaceId.value) {
+    params.workspaceId = workSpaceId.value
+  }
+  params.isRecycleBin = isRecycleBin.value
+  loading.value = true
+  await surveyListStore.getSurveyList(params)
   loading.value = false
 }
 
-// SOLUSI BAGIAN 2: onMounted dibuat non-blocking
-onMounted(() => {
-  const initData = async () => {
-    // Jalankan promise ini di latar belakang tanpa menunggu
-    Promise.all([fetchGroupList(), fetchSpaceList(), getRecycleBinCount()])
-    
-    // Atur state awal dan panggil data list utama
-    activeValue.value = 'all'
-    workSpaceStore.changeGroup('all')
-    
-    // await di sini penting agar 'loading.value' menjadi false setelah data utama selesai
-    await fetchSurveyList()
-  }
-  
-  initData()
+onMounted(async () => {
+  await Promise.all([fetchGroupList(), fetchSpaceList()])
+  // 异步获取回收站数量
+  getRecycleBinCount()
+  activeValue.value = 'all'
+  workSpaceStore.changeGroup('all')
+  await fetchSurveyList()
 })
 
 const modifyType = ref('add')
 const showSpaceModify = ref(false)
 
+// 当前团队信息
 const currentTeamSpace = computed(() => {
   return workSpaceList.value.find((item: any) => item._id === workSpaceId.value)
 })
@@ -396,13 +399,16 @@ const handleCloseCreateDialog = () => {
 }
 
 const toCreate = () => {
-  router.push('/create')
+  createMethod.value = 'blank'
+  questionList.value = []
+  showCreateForm.value = true
 }
 
 const openTextImport = () => {
   showCreateMethod.value = false;
-  showTextImport.value = true;
+  showCreateForm.value = true;
   createMethod.value = 'textImport'
+  createFormData.value = null
 }
 
 const opemAIGenerate = () => { 
@@ -411,7 +417,7 @@ const opemAIGenerate = () => {
   createMethod.value = 'AIGenerate'
 }
 
-const onShowCreateForm = () => {
+const onShowCreateForm = async () => {
   if (questionList.value.length <= 0) {
     ElMessage({
       type: 'error',
@@ -419,14 +425,11 @@ const onShowCreateForm = () => {
     })
     return
   }
-  showCreateForm.value = true
-}
-
-const onConfirmCreate = async (formValue: { title: string; remark?: string; surveyType: string; groupId?: string }, callback: (success: boolean) => void) => {
-  try {
+  if (createMethod.value === 'textImport' && createFormData.value) {
+    // Directly create for text import since form data is already stored
     const payload: any = {
-      ...formValue,
-      createMethod: createMethod.value,
+      ...createFormData.value,
+      createMethod: 'textImport',
       questionList: questionList.value,
     }
     if (workSpaceId.value) {
@@ -434,16 +437,117 @@ const onConfirmCreate = async (formValue: { title: string; remark?: string; surv
     }
     const res: any = await createSurvey(payload)
     if (res?.code === 200 && res?.data?.id) {
-      callback(true)
       const id = res.data.id
       router.push({
         name: 'QuestionEditIndex',
-        params: { id }
+        params: {
+          id
+        }
       })
-      showCreateForm.value = false
+      showTextImport.value = false
+      createFormData.value = null
     } else {
       ElMessage.error(res?.errmsg || '创建失败')
-      callback(false)
+    }
+  } else {
+    showCreateForm.value = true
+  }
+}
+
+const onConfirmCreate = async (formValue: { title: string; remark?: string; surveyType: string; groupId?: string }, callback: (success: boolean) => void) => {
+  try {
+    switch(createMethod.value) {
+      case 'textImport':
+        if (!createFormData.value) {
+          createFormData.value = formValue
+          showCreateForm.value = false
+          showTextImport.value = true
+          callback(true)
+        }
+        break;
+      case 'ExcelImport':
+        {
+        const payload: any = {
+          ...formValue,
+          createMethod: createMethod.value,
+          questionList: questionList.value,
+        }
+        if (workSpaceId.value) {
+          payload.workspaceId = workSpaceId.value
+        }
+        const res: any = await createSurvey(payload)
+        if (res?.code === 200 && res?.data?.id) {
+          callback(true)
+          const id = res.data.id
+          router.push({
+            name: 'QuestionEditIndex',
+            params: {
+              id
+            }
+          })
+          showCreateForm.value = false
+        } else {
+          ElMessage.error(res?.errmsg || '创建失败')
+          callback(false)
+        }
+        break;
+      }
+      case 'blank':
+        {
+        const payload: any = {
+          ...formValue,
+          createMethod: 'basic',
+          questionList: [],
+        }
+        if (workSpaceId.value) {
+          payload.workspaceId = workSpaceId.value
+        }
+        const res: any = await createSurvey(payload)
+        if (res?.code === 200 && res?.data?.id) {
+          callback(true)
+          const id = res.data.id
+          router.push({
+            name: 'QuestionEditIndex',
+            params: {
+              id
+            }
+          })
+          showCreateForm.value = false
+        } else {
+          ElMessage.error(res?.errmsg || '创建失败')
+          callback(false)
+        }
+        break;
+      }
+      case 'AIGenerate':{
+        const payload: any = {
+          ...formValue,
+          createMethod: createMethod.value,
+          questionList: questionList.value,
+        }
+        if (workSpaceId.value) {
+          payload.workspaceId = workSpaceId.value
+        }
+        const res: any = await createSurvey(payload)
+        if (res?.code === 200 && res?.data?.id) {
+          const id = res.data.id
+          callback(true)
+          router.push({
+            name: 'QuestionEditIndex',
+            params: {
+              id
+            }
+          })
+          showCreateForm.value = false
+        } else {
+          ElMessage.error(res?.errmsg || '创建失败')
+          callback(false)
+        }
+        break;
+      }
+      default:
+        callback(false)
+        break;
     }
   } catch (error) {
     console.error('创建问卷失败:', error)
@@ -455,6 +559,7 @@ const onConfirmCreate = async (formValue: { title: string; remark?: string; surv
 const onTextImportChange = (newQuestionList: Array<any>) => {
   questionList.value = newQuestionList
 }
+
 
 const openExcelImport = () => {
   showCreateMethod.value = false;
@@ -477,10 +582,10 @@ const onShowCreateFormExcelImport = () => {
 const onAIGenerteChange = (newQuestionList: Array<any>) => {
   questionList.value = newQuestionList
 }
+
 </script>
 
 <style lang="scss" scoped>
-/* Style tidak perlu diubah */
 .question-list-root {
   height: 100%;
   background-color: #f6f7f9;
